@@ -7,7 +7,10 @@
   "author": "Mostafa Eweda <mo.eweda@gmail.com>",
   "dependencies": {
     "async": "~0.2.8",
+    "body-parser": "^1.15.0",
     "express": "~3.2.4",
+    "morgan": "^1.7.0",
+    "mysql": "^2.10.2",
     "socket.io": "~0.9.14"
   }
 }
