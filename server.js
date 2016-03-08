@@ -17,7 +17,7 @@ var connection = mysql.createConnection({
   database : 'c9'
 });
 
-/*
+
 if(!connection.connect()) {
     //console.log('Database offline');
 }
@@ -41,24 +41,14 @@ app.get('/users', function(req,res) {
     res.send('UNIQUE exception');
   });
 });
-*/
 
-app.get('/test',function(req,res) {
-  res.send(
-    '<form action="/upload" enctype="multipart/form-data" method="post">'+
-    '<input type="text" name="title"><br>'+
-    '<input type="file" name="upload" multiple="multiple"><br>'+
-    '<input type="submit" value="Upload">'+
-    '</form>'
-  );
-});
 
 app.post('/upload', function(req,res) {
   var form = new multiparty.Form();
 
   form.parse(req, function(err,fields,files) {
     console.log(files);
-    res.send('True');
+    res.send('success');
   });
 });
 
