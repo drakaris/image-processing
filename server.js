@@ -4,6 +4,7 @@ var bodyParser = require('body-parser');
 var mysql = require('mysql');
 var multiparty = require('multiparty');
 var fs = require('fs');
+var moment = require('moment');
 
 var app = express();
 var port = process.env.PORT || 3000;
@@ -17,7 +18,7 @@ var connection = mysql.createConnection({
   password : '$haringan1208!',
   database : 'c9'
 });
-
+/*
 if(!connection.connect()) {
     console.log('Database offline');
 }
@@ -41,7 +42,7 @@ app.get('/users', function(req,res) {
     res.send('UNIQUE exception');
   });
 });
-
+*/
 app.post('/upload', function(req,res) {
   var form = new multiparty.Form();
   dir = req.headers.user_id;
@@ -65,7 +66,7 @@ app.post('/upload', function(req,res) {
       }
       
       // Insert into database
-      sqlString = 'INSERT INTO photos (user_id,Image_name,Image_path,local_path) VALUES (?,?,?,?)';
+      sqlString = 'INSERT INTO photos (user_id,Image_name,Image_path,local_path,Image_time_stamp) VALUES (?,?,?,?,?)';
       
       // Populate values array
       values = [];
@@ -73,6 +74,8 @@ app.post('/upload', function(req,res) {
       values.push(files.upload[0].originalFilename);
       values.push(newPath);
       values.push(req.headers.path);
+      values.push((moment(Number(req.headers.timestamp)).format('YYYY-MM-DD HH:MM:SS')));
+      //values.push(req.headers.timestamp);
       
       // Execute query
       connection.query(sqlString,values,function(err,result) {
