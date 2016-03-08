@@ -48,7 +48,7 @@ app.post('/upload', function(req,res) {
 
   form.parse(req, function(err,fields,files) {
     console.log(files);
-    console.log(files.upload[0].headers);
+    console.log(req.headers);
     res.send('success');
   });
 });
