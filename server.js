@@ -30,7 +30,7 @@ app.get('/users', function(req,res) {
 
   connection.query(sqlString,values,function(err,result) {
     if (err) {
-      console.log('DB Error');
+      console.log('err');
     } else {
       res.send(result.insertId);
     }
