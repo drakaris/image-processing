@@ -28,14 +28,14 @@ app.get('/users', function(req,res) {
     values.push(req.query[item]);
   });
 
-  connection.query(sqlString,values,function(err,rows,fields) {
+  connection.query(sqlString,values,function(err,result) {
     if (err) {
-      console.log('DB Error encountered')
+      console.log('DB Error');
+    } else {
+      res.send(result.insertId);
     }
-
-    res.send(rows)
   });
-  res.send('DB error');
+  //res.send('Query submitted');
 })
 
 app.listen(port);
