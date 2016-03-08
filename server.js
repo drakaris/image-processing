@@ -16,10 +16,12 @@ var connection = mysql.createConnection({
   database : 'c9'
 });
 
-connection.connect();
+if(!connection.connect()) {
+    console.log('Database offline');
+}
 
 app.get('/users', function(req,res) {
-  sqlString = 'INSERT INTO users (name,app_id,android_id,active_flag) VALUES (?,?,?,?)';
+  sqlString = 'INSERT INTO users (name,android_id,active_flag) VALUES (?,?,?)';
 
   values = [];
   keys = Object.keys(req.query);
@@ -30,12 +32,12 @@ app.get('/users', function(req,res) {
 
   connection.query(sqlString,values,function(err,result) {
     if (err) {
-      console.log('err');
+      console.log(err);
     } else {
-      res.send(result.insertId);
+      res.send(result.insertId.toString());
     }
+    res.send('UNIQUE exception');
   });
-  res.send('Exception');
-})
+});
 
 app.listen(port);
