@@ -35,7 +35,7 @@ app.get('/users', function(req,res) {
       res.send(result.insertId);
     }
   });
-  //res.send('Query submitted');
+  res.send('Exception');
 })
 
 app.listen(port);
