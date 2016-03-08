@@ -72,7 +72,7 @@ app.post('/upload', function(req,res) {
       values.push(dir);
       values.push(files.upload[0].originalFilename);
       values.push(newPath);
-      values.push(files.upload[0].path);
+      values.push(req.headers.path);
       
       // Execute query
       connection.query(sqlString,values,function(err,result) {
