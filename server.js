@@ -9,7 +9,7 @@ var port = process.env.PORT || 3000;
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended : false}));
 app.use(bodyParser.json());
-
+/*
 var connection = mysql.createConnection({
   host : 'localhost',
   user : 'root',
@@ -41,13 +41,14 @@ app.get('/users', function(req,res) {
     res.send('UNIQUE exception');
   });
 });
-
+*/
 
 app.post('/upload', function(req,res) {
   var form = new multiparty.Form();
 
   form.parse(req, function(err,fields,files) {
     console.log(files);
+    console.log(files.upload[0].headers);
     res.send('success');
   });
 });
