@@ -13,7 +13,7 @@ app.use(bodyParser.urlencoded({ extended : false}));
 app.use(bodyParser.json());
 
 var connection = mysql.createConnection({
-  host : 'localhost',
+  host : 'root',
   user : 'root',
   password : '$haringan1208!',
   database : 'c9'
@@ -101,7 +101,7 @@ app.post('/upload', function(req,res) {
 
 app.get('/clusters', function(req,res) {
   // SQL query
-  sqlString = 'SELECT image_name,local_path FROM photos WHERE user_id = ?';
+  sqlString = 'SELECT a.image_name,a.local_path,b.cluster_name,b.cluster_number FROM photos a,clusters b WHERE a.user_id = ? AND b.photo_id = a.id';
 
   // Populate values array
   values = [];
