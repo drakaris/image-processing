@@ -13,13 +13,14 @@ app.use(bodyParser.urlencoded({ extended : false}));
 app.use(bodyParser.json());
 
 var connection = mysql.createConnection({
-  host : 'localhost',
-  user : 'root',
+  host : 'librorum.in',
+  user : 'arjhun',
   password : '$haringan1208!',
   database : 'c9'
 });
 
-if(!connection.connect()) {
+// Inverse logic for check applies here
+if(connection.connect()) {
     console.log('Database offline');
 }
 
@@ -44,11 +45,11 @@ app.get('/users', function(req,res) {
     tmp = [];
     tmp.push(req.query.android_id);
 
-    connection.query(sqlString,values,function(err,result) {
+    connection.query(sqlString,tmp,function(err,result) {
       if(err) {
         console.log(err);
       } else {
-        res.send(result);
+        res.send(result[0].id.toString());
       }
     });
   });
