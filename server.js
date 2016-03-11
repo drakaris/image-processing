@@ -29,9 +29,9 @@ app.get('/users', function(req,res) {
   values = [];
   keys = Object.keys(req.query);
 
-  keys.forEach(function(item) {
-    values.push(req.query[item]);
-  });
+  values.push(req.query.name);
+  values.push(req.query.android_id);
+  values.push(req.query.active_flag);
 
   connection.query(sqlString,values,function(err,result) {
     if (err) {
@@ -39,7 +39,18 @@ app.get('/users', function(req,res) {
     } else {
       res.send(result.insertId.toString());
     }
-    res.send('UNIQUE exception');
+    // Handle unique exception
+    sqlString = 'SELECT id FROM users WHERE android_id = ?';
+    tmp = [];
+    tmp.push(req.query.android_id);
+
+    connection.query(sqlString,values,function(err,result) {
+      if(err) {
+        console.log(err);
+      } else {
+        res.send(result);
+      }
+    });
   });
 });
 
