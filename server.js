@@ -5,6 +5,7 @@ var mysql = require('mysql');
 var multiparty = require('multiparty');
 var fs = require('fs');
 var moment = require('moment');
+var child_process = require('child_process');
 
 var app = express();
 var port = process.env.PORT || 3000;
@@ -13,8 +14,8 @@ app.use(bodyParser.urlencoded({ extended : false}));
 app.use(bodyParser.json());
 
 var connection = mysql.createConnection({
-  host : 'localhost',
-  user : 'root',
+  host : 'librorum.in',
+  user : 'arjhun',
   password : '$haringan1208!',
   database : 'c9'
 });
@@ -99,9 +100,21 @@ app.post('/upload', function(req,res) {
   });
 });
 
-app.get('/clusters', function(req,res) {
+app.get('/clusters', function (req,res,next) {
+  // Middleware for handling clustering CPP file
+  // Generate command for execution
+  command = './main ' + req.query.user_id;
+  console.log('Executing command : ' + command);
+  child_process.exec(command, function(err,stdout,stderr) {
+    if(err) {
+      console.log('Execution quit with error code : ' + err.code);
+    }
+    console.log(stdout);
+    next();
+  });
+}, function(req,res) {
   // SQL query
-  sqlString = 'SELECT a.image_name,a.local_path,b.cluster_name,b.cluster_number FROM photos a,clusters b WHERE a.user_id = ? AND b.photo_id = a.id';
+  sqlString = 'SELECT a.image_name,a.local_path,b.cluster_name,b.cluster_number FROM photos a,clusters b WHERE b.user_id = ? AND b.photo_id = a.id';
 
   // Populate values array
   values = [];
