@@ -13,6 +13,20 @@ app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended : false}));
 app.use(bodyParser.json());
 
+/********************
+* Support Functions *
+********************/
+function search_array(value, myArray) {
+  for (var i = 0; i < myArray.length; i++) {
+    if(value == myArray[i]) {
+      return true;
+    }
+  }
+}
+
+/**********************
+* Database Conenction *
+**********************/
 var connection = mysql.createConnection({
   host : 'librorum.in',
   user : 'arjhun',
@@ -25,6 +39,9 @@ if(connection.connect()) {
     console.log('Database offline');
 }
 
+/*************
+* API Routes *
+*************/
 app.get('/users', function(req,res) {
   sqlString = 'INSERT INTO users (name,android_id,active_flag) VALUES (?,?,?)';
 
@@ -125,7 +142,20 @@ app.get('/clusters', function (req,res,next) {
       console.log(err);
       res.send('Error');
     } else {
-      res.send(result);
+      // Generate final result
+      final_result = {};
+      final_result['images'] = result;
+      final_result['thumbnails'] = {};
+
+      // Retrieve cluster thumbnails
+      dir = req.query.user_id + '/ThumbNails';
+      thumbs = fs.readdirSync(dir);
+      thumbs.forEach(function(thumb) {
+        name = thumb.split('.')[0];
+        final_result['thumbnails'][name] = thumb;
+      });
+      
+      res.send(final_result);
     }
   });
 });
