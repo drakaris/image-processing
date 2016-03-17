@@ -152,9 +152,10 @@ app.get('/clusters', function (req,res,next) {
       thumbs = fs.readdirSync(dir);
       thumbs.forEach(function(thumb) {
         name = thumb.split('.')[0];
+        thumb = 'thumbs.librorum.in/' + req.query.user_id + '/ThumbNails/' + thumb;
         final_result['thumbnails'][name] = thumb;
       });
-      
+
       res.send(final_result);
     }
   });
