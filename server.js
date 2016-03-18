@@ -161,4 +161,23 @@ app.get('/clusters', function (req,res,next) {
   });
 });
 
+app.get('/renameCluster', function(req,res) {
+  // SQL query
+  sqlString = 'UPDATE clusters SET cluster_name = ? WHERE cluster_number = ?';
+  // Populate values array
+  values = [];
+  values.push(req.query.cluster_name);
+  values.push(req.query.cluster_number);
+
+  // Execute SQL query
+  connection.query(sqlString,values,function(err,results) {
+    if(err) {
+      console.log(err);
+      res.send('Error');
+    } else {
+      res.send('Success');
+    }
+  });
+});
+
 app.listen(port);
