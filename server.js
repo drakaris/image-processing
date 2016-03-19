@@ -151,9 +151,11 @@ app.get('/clusters', function (req,res,next) {
       dir = req.query.user_id + '/ThumbNails';
       thumbs = fs.readdirSync(dir);
       thumbs.forEach(function(thumb) {
+        // Cluster name logic happens here.
         name = thumb.split('.')[0];
         thumb = 'thumbs.librorum.in/' + req.query.user_id + '/ThumbNails/' + thumb;
         final_result['thumbnails'][name] = thumb;
+        final_result['thumbnails']['cluster_name'] = '';
       });
 
       res.send(final_result);
