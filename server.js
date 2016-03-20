@@ -169,7 +169,7 @@ app.get('/thumbnails', function(req,res,next) {
         console.log(err);
         res.send('Error');
       } else {
-        res['custom_data'][values[0]] = result[0].cluster_name;
+        res.custom_data[values[0]] = result[0].cluster_name;
       }
     });
   });
@@ -184,7 +184,7 @@ app.get('/thumbnails', function(req,res,next) {
 
     tmp['cluster_number'] = thumb.split('.')[0];
     tmp['image_path'] = 'thumbs.librorum.in/' + req.query.user_id + '/ThumbNails/' + thumb;
-    tmp['cluster_name'] = res['custom_data'][index];
+    tmp['cluster_name'] = res.custom_data[index];
 
     thumbnails.push(tmp);
   });
