@@ -168,7 +168,9 @@ app.get('/thumbnails', function(req,res) {
         console.log(err);
         res.send('Error');
       } else {
-        res.send(result);
+        tmp['cluster_name'] = results[0].cluster_name;
+        tmp['image_path'] = thumb;
+        res.send(tmp);
       }
     });
   });
