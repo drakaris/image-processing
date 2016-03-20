@@ -156,11 +156,11 @@ app.get('/clusters', function (req,res,next) {
 
 app.get('/thumbnails', function(req,res) {
   answer_set = [];
-  tmp = {};
   dir = req.query.user_id + '/ThumbNails';
   thumbs = fs.readdirSync(dir);
   thumbs.forEach(function(thumb) {
     values = [];
+    //tmp = {};
     sqlString = 'SELECT cluster_name FROM clusters WHERE cluster_number = ? LIMIT 1';
 
     tmp['cluster_number'] = thumb.split('.')[0];
