@@ -160,7 +160,7 @@ app.get('/thumbnails', function(req,res) {
   thumbs = fs.readdirSync(dir);
   thumbs.forEach(function(thumb) {
     values = [];
-    //tmp = {};
+    tmp = {};
     sqlString = 'SELECT cluster_name FROM clusters WHERE cluster_number = ? LIMIT 1';
 
     tmp['cluster_number'] = thumb.split('.')[0];
