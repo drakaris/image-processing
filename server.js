@@ -6,6 +6,7 @@ var multiparty = require('multiparty');
 var fs = require('fs');
 var moment = require('moment');
 var child_process = require('child_process');
+var async = require('async');
 
 var app = express();
 var port = process.env.PORT || 3000;
@@ -154,52 +155,54 @@ app.get('/clusters', function (req,res,next) {
   });
 });
 
-app.get('/thumbnails', function(req,res,next) {
-  dir = req.query.user_id + '/ThumbNails';
-  thumbs = fs.readdirSync(dir);
-  thumbs.forEach(function(thumb) {
-    values = [];
-    values.push(thumb.split('.')[0]);
-
-    //SQL query
-    sqlString = 'SELECT cluster_name FROM clusters WHERE cluster_number = ? LIMIT 1';
-
-    connection.query(sqlString,values,function(err,result) {
-      if(err) {
-        console.log(err);
-        res.send('Error');
-      } else {
-        res['custom_data'][values[0]] = result[0].cluster_name;
-      }
-    });
-  });
-  next();
-},function(req,res) {
+app.get('/thumbnails',function(req,res) {
   thumbnails = [];
   dir = req.query.user_id + '/ThumbNails';
   thumbs = fs.readdirSync(dir);
-  thumbs.forEach(function(thumb) {
+
+  // Start Async
+  async.eachSeries(thumbs,function(thumb,callback) {
     tmp = {};
-    index = thumb.split('.')[0];
+    cluster_number = thumb.split('.')[0];
+    cluster_path = 'thumbs.librorum.in/' + req.query.user_id + '/ThumbNails/' + thumb;
 
-    tmp['cluster_number'] = thumb.split('.')[0];
-    tmp['image_path'] = 'thumbs.librorum.in/' + req.query.user_id + '/ThumbNails/' + thumb;
-    //tmp['cluster_name'] = res.custom_data[index];
-    console.log(res.custom_data);
+    tmp['cluster_number'] = cluster_number;
+    tmp['cluster_path'] = cluster_path;
 
-    thumbnails.push(tmp);
+    sqlString = 'SELECT cluster_name FROM clusters WHERE cluster_number = ? LIMIT 1';
+    values = [];
+    values.push(cluster_number);
+    connection.query(sqlString,values,function(err,result) {
+      if(err) {
+        console.log(err);
+      } else {
+        cluster_name = result[0].cluster_name;
+        if(cluster_name == null) {
+          tmp['cluster_name'] = '';
+        } else {
+          tmp['cluster_name'] = cluster_name;
+        }
+        thumbnails.push(tmp);
+        callback();
+      }
+    });
+  },function(err) {
+    if(err) {
+      console.log('Async Error');
+    } else {
+      res.send(thumbnails);
+    }
   });
-  // Return values
-  res.send(thumbnails);
 });
 
 app.get('/renameCluster', function(req,res) {
   // SQL query
-  sqlString = 'UPDATE clusters SET cluster_name = ? WHERE cluster_number = ?';
+  sqlString = 'UPDATE clusters SET cluster_name = ? WHERE cluster_number = ? AND user_id = ?';
   // Populate values array
   values = [];
   values.push(req.query.cluster_name);
   values.push(req.query.cluster_number);
+  values.push(req.query.user_id);
 
   // Execute SQL query
   connection.query(sqlString,values,function(err,results) {
@@ -209,6 +212,36 @@ app.get('/renameCluster', function(req,res) {
     } else {
       res.send('Success');
     }
+  });
+});
+
+app.get('/recognize', function(req,res) {
+  command = './recog' + req.query.user_id;
+  console.log('Executing command : ' + command);
+  child_process.exec(command, function(err,stdout,stderr) {
+    if(err) {
+      console.log('Execution quit with error code : ' + err.code);
+    }
+    console.log(stdout);
+
+    // SQL query
+    sqlString = 'SELECT a.image_name,a.local_path,b.cluster_name,b.cluster_number FROM photos a,clusters b WHERE b.user_id = ? AND b.photo_id = a.id';
+
+    // Populate values array
+    values = [];
+    values.push(req.query.user_id);
+
+    connection.query(sqlString,values,function(err,result) {
+      if(err) {
+        console.log(err);
+        res.send('Error');
+      } else {
+        // Generate final result
+        final_result = {};
+        final_result['images'] = result;
+        res.send(final_result);
+      }
+    });
   });
 });
 
