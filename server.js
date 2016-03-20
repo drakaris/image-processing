@@ -127,6 +127,8 @@ app.get('/clusters', function (req,res,next) {
       console.log('Execution quit with error code : ' + err.code);
     }
     console.log(stdout);
+    path = req.query.user_id + '/ThumbNails';
+    fs.chmodSync(path, 0770);
     next();
   });
 }, function(req,res) {
@@ -145,21 +147,30 @@ app.get('/clusters', function (req,res,next) {
       // Generate final result
       final_result = {};
       final_result['images'] = result;
-      final_result['thumbnails'] = {};
-
-      // Retrieve cluster thumbnails
-      dir = req.query.user_id + '/ThumbNails';
-      thumbs = fs.readdirSync(dir);
-      thumbs.forEach(function(thumb) {
-        // Cluster name logic happens here.
-        name = thumb.split('.')[0];
-        thumb = 'thumbs.librorum.in/' + req.query.user_id + '/ThumbNails/' + thumb;
-        final_result['thumbnails'][name] = thumb;
-        final_result['thumbnails']['cluster_name'] = '';
-      });
-
       res.send(final_result);
     }
+  });
+});
+
+app.get('/thumbnails', function(req,res) {
+  thumbnails = [];
+  dir = req.query.user_id + '/ThumbNails';
+  thumbs = fs.readdirSync(dir);
+  thumbs.forEach(function(thumb) {
+    tmp = {};
+    values = [];
+    sqlString = 'SELECT cluster_name FROM clusters WHERE cluster_number = ? LIMIT 1';
+
+    tmp['cluster_number'] = thumb.split('.')[0];
+    values.push(tmp['cluster_number']);
+    connection.query(sqlString,values,function(err,result) {
+      if(err) {
+        console.log(err);
+        res.send('Error');
+      } else {
+        res.send(result);
+      }
+    });
   });
 });
 
