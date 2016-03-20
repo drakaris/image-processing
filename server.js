@@ -158,7 +158,7 @@ app.get('/thumbnails',function(req,res) {
   dir = req.query.user_id + '/ThumbNails';
 
   // Set appropriate permissions for files
-  command =
+  //command =
   thumbs = fs.readdirSync(dir);
 
   // Start Async
