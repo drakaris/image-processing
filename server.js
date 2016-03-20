@@ -168,7 +168,7 @@ app.get('/thumbnails', function(req,res) {
         console.log(err);
         res.send('Error');
       } else {
-        tmp['cluster_name'] = results[0].cluster_name;
+        tmp['cluster_name'] = result[0].cluster_name;
         tmp['image_path'] = thumb;
         res.send(tmp);
       }
