@@ -176,11 +176,11 @@ app.get('/thumbnails', function(req,res) {
       } else {
         tmp['cluster_name'] = result[0].cluster_name;
         thumbnails.push(tmp);
-        res.send(thumbnails);
       }
     });
   });
-  // Return thumbnails result
+  // Return values
+  res.send(thumbnails);
 });
 
 app.get('/renameCluster', function(req,res) {
