@@ -95,6 +95,8 @@ app.post('/upload', function(req,res) {
         fs.renameSync(files.upload[0].path, newPath);
       }
 
+      fs.chmodSync(dir, 0770);
+
       // Insert into database
       sqlString = 'INSERT INTO photos (user_id,Image_name,Image_path,local_path,Image_time_stamp) VALUES (?,?,?,?,?)';
 
@@ -122,12 +124,12 @@ app.get('/clusters', function (req,res,next) {
   // Generate command for execution
   command = './main ' + req.query.user_id;
   console.log('Executing command : ' + command);
-  child_process.exec(command, function(err,stdout,stderr) {
+/*  child_process.exec(command, function(err,stdout,stderr) {
     if(err) {
       console.log('Execution quit with error code : ' + err.code);
     }
     console.log(stdout);
-    path = req.query.user_id + '/ThumbNails';
+*/    path = req.query.user_id + '/ThumbNails';
     fs.chmodSync(path, 0770);
     next();
   });
@@ -169,7 +171,7 @@ app.get('/thumbnails', function(req,res) {
         res.send('Error');
       } else {
         tmp['cluster_name'] = result[0].cluster_name;
-        tmp['image_path'] = req.query.user_id + '/ThumbNails/'+ thumb;
+        tmp['image_path'] = 'thumbs.librorum.in/' + req.query.user_id + '/ThumbNails/'+ thumb;
         res.send(tmp);
       }
     });
