@@ -164,6 +164,7 @@ app.get('/thumbnails', function(req,res) {
     sqlString = 'SELECT cluster_name FROM clusters WHERE cluster_number = ? LIMIT 1';
 
     tmp['cluster_number'] = thumb.split('.')[0];
+    console.log(values);
     values.push(tmp['cluster_number']);
     connection.query(sqlString,values,function(err,result) {
       if(err) {
