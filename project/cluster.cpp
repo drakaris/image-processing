@@ -87,7 +87,7 @@ void ClusterFacesOne(Mat lbp_array , vector<int> pid , int uid , vector<Mat> fil
 
     /* K Means Clustering */
 
-    for(int count = 0 ; count < 5 ; count++)
+    for(int count = 0 ; count < 1 ; count++)
     {
         double sse[clusterCount+1];
         for(int i = 1 ; i <= clusterCount ; i++)
@@ -111,12 +111,12 @@ void ClusterFacesOne(Mat lbp_array , vector<int> pid , int uid , vector<Mat> fil
     //Find the value of K
     for(int i = 1 ; i <= clusterCount ; i++)
     {
-        avg_sse_count[i] = avg_sse_count[i]/5.0;
+        avg_sse_count[i] = avg_sse_count[i]/1.0;
         cout << avg_sse_count[i] << endl;
     }
-    double cmp = avg_sse_count[1] - avg_sse_count[2];
+    double cmp = avg_sse_count[2] - avg_sse_count[3];
 	cout << "Difference " << endl << cmp << endl;
-    int k = 1;
+    int k = 2;
     for(int i = 2 ; i < clusterCount ; i++)
     {
         double val = avg_sse_count[i] - avg_sse_count[i+1];
