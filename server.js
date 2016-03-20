@@ -167,7 +167,7 @@ app.get('/thumbnails', function(req,res) {
     tmp['image_path'] = 'thumbs.librorum.in/' + req.query.user_id + '/ThumbNails/' + thumb;
 
     //SQL query
-    sqlString = 'SELECT cluster_name FROM clusters WHERE cluster_number = ?';
+    sqlString = 'SELECT cluster_name FROM clusters WHERE cluster_number = ? LIMIT 1';
 
     connection.query(sqlString,values,function(err,result) {
       if(err) {
