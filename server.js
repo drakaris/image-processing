@@ -154,16 +154,11 @@ app.get('/clusters', function (req,res,next) {
   });
 });
 
-app.get('/thumbnails', function(req,res) {
-  thumbnails = [];
-  dir = req.query.user_id + '/ThumbNails';
+app.get('/thumbnails', function(req,res,next) {
   thumbs = fs.readdirSync(dir);
   thumbs.forEach(function(thumb) {
-    tmp = {};
     values = [];
     values.push(thumb.split('.')[0]);
-
-
 
     //SQL query
     sqlString = 'SELECT cluster_name FROM clusters WHERE cluster_number = ? LIMIT 1';
@@ -173,13 +168,24 @@ app.get('/thumbnails', function(req,res) {
         console.log(err);
         res.send('Error');
       } else {
-        console.log(result);
-        tmp['cluster_number'] = thumb.split('.')[0];
-        tmp['image_path'] = 'thumbs.librorum.in/' + req.query.user_id + '/ThumbNails/' + thumb;
-        tmp['cluster_name'] = result[0].cluster_name;
-        thumbnails.push(tmp);
+        req['custom_data'][values[0]] = result[0].cluster_name;
       }
     });
+  });
+  next();
+},function(req,res) {
+  thumbnails = [];
+  dir = req.query.user_id + '/ThumbNails';
+  thumbs = fs.readdirSync(dir);
+  thumbs.forEach(function(thumb) {
+    tmp = {};
+    index = thumb.split('.')[0];
+
+    tmp['cluster_number'] = thumb.split('.')[0];
+    tmp['image_path'] = 'thumbs.librorum.in/' + req.query.user_id + '/ThumbNails/' + thumb;
+    tmp['cluster_name'] = req['custom_data'][index];
+
+    thumbnails.push(tmp);
   });
   // Return values
   res.send(thumbnails);
