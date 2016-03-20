@@ -197,11 +197,12 @@ app.get('/thumbnails',function(req,res) {
 
 app.get('/renameCluster', function(req,res) {
   // SQL query
-  sqlString = 'UPDATE clusters SET cluster_name = ? WHERE cluster_number = ?';
+  sqlString = 'UPDATE clusters SET cluster_name = ? WHERE cluster_number = ? AND user_id = ?';
   // Populate values array
   values = [];
   values.push(req.query.cluster_name);
   values.push(req.query.cluster_number);
+  values.push(req.query.user_id);
 
   // Execute SQL query
   connection.query(sqlString,values,function(err,results) {
@@ -211,6 +212,36 @@ app.get('/renameCluster', function(req,res) {
     } else {
       res.send('Success');
     }
+  });
+});
+
+app.get('/recognize', function(req,res) {
+  command = './recog' + req.query.user_id;
+  console.log('Executing command : ' + command);
+  child_process.exec(command, function(err,stdout,stderr) {
+    if(err) {
+      console.log('Execution quit with error code : ' + err.code);
+    }
+    console.log(stdout);
+
+    // SQL query
+    sqlString = 'SELECT a.image_name,a.local_path,b.cluster_name,b.cluster_number FROM photos a,clusters b WHERE b.user_id = ? AND b.photo_id = a.id';
+
+    // Populate values array
+    values = [];
+    values.push(req.query.user_id);
+
+    connection.query(sqlString,values,function(err,result) {
+      if(err) {
+        console.log(err);
+        res.send('Error');
+      } else {
+        // Generate final result
+        final_result = {};
+        final_result['images'] = result;
+        res.send(final_result);
+      }
+    });
   });
 });
 
