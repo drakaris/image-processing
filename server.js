@@ -159,26 +159,16 @@ app.get('/thumbnails', function(req,res) {
   dir = req.query.user_id + '/ThumbNails';
   thumbs = fs.readdirSync(dir);
   thumbs.forEach(function(thumb) {
-    console.log(thumb);
-    values = [];
     tmp = {};
-    sqlString = 'SELECT cluster_name FROM clusters WHERE cluster_number = ? LIMIT 1';
+    values = [];
+    values.push(thumb.split('.')[0]);
+    console.log(values);
 
     tmp['cluster_number'] = thumb.split('.')[0];
-    values.push(thumb.split('.')[0]);
-    connection.query(sqlString,values,function(err,result) {
-      if(err) {
-        console.log(err);
-        res.send('Error');
-      } else {
-        tmp['cluster_name'] = result[0].cluster_name;
-        tmp['image_path'] = 'thumbs.librorum.in/' + req.query.user_id + '/ThumbNails/'+ thumb;
-        console.log(tmp);
-        thumbnails.push(tmp);
-      }
-    });
-  });
+    tmp['image_path'] = 'thumbs.librorum.in/' + req.query.user_id + '/ThumbNails/' + thumb;
 
+    thumbnails.push(tmp);
+  });
   // Return thumbnails results
   res.send(thumbnails);
 });
