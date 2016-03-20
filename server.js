@@ -124,12 +124,12 @@ app.get('/clusters', function (req,res,next) {
   // Generate command for execution
   command = './main ' + req.query.user_id;
   console.log('Executing command : ' + command);
-/*  child_process.exec(command, function(err,stdout,stderr) {
+  child_process.exec(command, function(err,stdout,stderr) {
     if(err) {
       console.log('Execution quit with error code : ' + err.code);
     }
     console.log(stdout);
-*/    path = req.query.user_id + '/ThumbNails';
+    path = req.query.user_id + '/ThumbNails';
     fs.chmodSync(path, 0770);
     next();
   });
