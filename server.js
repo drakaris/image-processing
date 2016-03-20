@@ -175,11 +175,7 @@ app.get('/thumbnails', function(req,res) {
         res.send('Error');
       } else {
         console.log(result);
-        if(result[0].cluster_name == null) {
-          tmp['cluster_name'] = '';
-        } else {
-          tmp['cluster_name'] = result[0].cluster_name;
-        }
+        tmp['cluster_name'] = '';
       }
     });
     thumbnails.push(tmp);
