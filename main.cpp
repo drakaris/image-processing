@@ -69,9 +69,12 @@ int main(int argc, const char *argv[])
     lbp_array.push_back(lbp);
   }
   cout << "LBP Array size" << lbp_array.size() << "\n";
+if(name.size() > 0 )
+{
   //ClusterFaces(lbp_array , source_id_array , atoi(argv[1]) , filtered_array , thumbnail_array);
   ClusterFacesOne(lbp_array , source_id_array , atoi(argv[1]) , filtered_array , thumbnail_array);
   //HeirarchicalClusters(lbp_array , source_id_array , atoi(argv[1]) , filtered_array , thumbnail_array);
+}
 
 	return 0;
 }
