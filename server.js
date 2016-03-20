@@ -158,13 +158,13 @@ app.get('/thumbnails', function(req,res) {
   answer_set = [];
   dir = req.query.user_id + '/ThumbNails';
   thumbs = fs.readdirSync(dir);
+  console.log(thumbs);
   thumbs.forEach(function(thumb) {
     values = [];
     tmp = {};
     sqlString = 'SELECT cluster_name FROM clusters WHERE cluster_number = ? LIMIT 1';
 
     tmp['cluster_number'] = thumb.split('.')[0];
-    console.log(values);
     values.push(tmp['cluster_number']);
     connection.query(sqlString,values,function(err,result) {
       if(err) {
