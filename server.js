@@ -177,9 +177,9 @@ app.get('/thumbnails', function(req,res) {
         tmp['cluster_number'] = thumb.split('.')[0];
         tmp['image_path'] = 'thumbs.librorum.in/' + req.query.user_id + '/ThumbNails/' + thumb;
         tmp['cluster_name'] = result[0].cluster_name;
+        thumbnails.push(tmp);
       }
     });
-    thumbnails.push(tmp);
   });
   // Return values
   res.send(thumbnails);
