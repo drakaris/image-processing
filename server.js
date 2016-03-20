@@ -175,7 +175,7 @@ app.get('/thumbnails', function(req,res) {
         res.send('Error');
       } else {
         tmp['cluster_name'] = result[0].cluster_name;
-        thumnails.push(tmp);
+        thumbnails.push(tmp);
         res.send(thumbnails);
       }
     });
