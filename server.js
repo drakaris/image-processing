@@ -162,10 +162,21 @@ app.get('/thumbnails', function(req,res) {
     tmp = {};
     values = [];
     values.push(thumb.split('.')[0]);
-    console.log(values);
 
     tmp['cluster_number'] = thumb.split('.')[0];
     tmp['image_path'] = 'thumbs.librorum.in/' + req.query.user_id + '/ThumbNails/' + thumb;
+
+    //SQL query
+    sqlString = 'SELECT cluster_name FROM clusters WHERE cluster_number = ?';
+
+    connection.query(sqlString,values,function(err,result) {
+      if(err) {
+        console.log(err);
+        res.send('Error');
+      } else {
+        tmp['cluster_name'] = result[0].cluster_name;
+      }
+    });
 
     thumbnails.push(tmp);
   });
