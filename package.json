@@ -6,7 +6,7 @@
   "repository": "",
   "author": "Mostafa Eweda <mo.eweda@gmail.com>",
   "dependencies": {
-    "async": "~0.2.8",
+    "async": "^0.2.10",
     "body-parser": "^1.15.0",
     "express": "~3.2.4",
     "moment": "^2.12.0",
