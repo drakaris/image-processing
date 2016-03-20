@@ -169,7 +169,7 @@ app.get('/thumbnails', function(req,res,next) {
         console.log(err);
         res.send('Error');
       } else {
-        res.custom_data[values[0]] = result[0].cluster_name;
+        res['custom_data'][values[0]] = result[0].cluster_name;
       }
     });
   });
