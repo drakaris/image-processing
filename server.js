@@ -156,10 +156,10 @@ app.get('/clusters', function (req,res,next) {
 
 app.get('/thumbnails', function(req,res) {
   answer_set = [];
+  tmp = {};
   dir = req.query.user_id + '/ThumbNails';
   thumbs = fs.readdirSync(dir);
   thumbs.forEach(function(thumb) {
-    tmp = {};
     values = [];
     sqlString = 'SELECT cluster_name FROM clusters WHERE cluster_number = ? LIMIT 1';
 
