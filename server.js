@@ -169,7 +169,7 @@ app.get('/thumbnails', function(req,res) {
         res.send('Error');
       } else {
         tmp['cluster_name'] = result[0].cluster_name;
-        tmp['image_path'] = thumb;
+        tmp['image_path'] = req.query.user_id + '/ThumbNails/'+ thumb;
         res.send(tmp);
       }
     });
