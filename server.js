@@ -184,7 +184,8 @@ app.get('/thumbnails', function(req,res,next) {
 
     tmp['cluster_number'] = thumb.split('.')[0];
     tmp['image_path'] = 'thumbs.librorum.in/' + req.query.user_id + '/ThumbNails/' + thumb;
-    tmp['cluster_name'] = res.custom_data[index];
+    //tmp['cluster_name'] = res.custom_data[index];
+    console.log(res.custom_data);
 
     thumbnails.push(tmp);
   });
