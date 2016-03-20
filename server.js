@@ -168,7 +168,7 @@ app.get('/thumbnails',function(req,res) {
     cluster_path = 'thumbs.librorum.in/' + req.query.user_id + '/ThumbNails/' + thumb;
 
     tmp['cluster_number'] = cluster_number;
-    tmp['cluster_path'] = cluster_path;
+    tmp['image_path'] = cluster_path;
 
     sqlString = 'SELECT cluster_name FROM clusters WHERE cluster_number = ? LIMIT 1';
     values = [];
@@ -191,6 +191,8 @@ app.get('/thumbnails',function(req,res) {
     if(err) {
       console.log('Async Error');
     } else {
+      results = {};
+      results['']
       res.send(thumbnails);
     }
   });
