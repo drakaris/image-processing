@@ -90,13 +90,11 @@ app.post('/upload', function(req,res) {
 
       // Move file from tmp to local project
       if(!fs.existsSync(dir)) {
-        fs.mkdirSync(dir,0766);
+        fs.mkdirSync(dir,0775);
         fs.renameSync(files.upload[0].path, newPath);
       } else {
         fs.renameSync(files.upload[0].path, newPath);
       }
-
-      fs.chmodSync(dir, 0770);
 
       // Insert into database
       sqlString = 'INSERT INTO photos (user_id,Image_name,Image_path,local_path,Image_time_stamp) VALUES (?,?,?,?,?)';
@@ -131,7 +129,7 @@ app.get('/clusters', function (req,res,next) {
     }
     console.log(stdout);
     path = req.query.user_id + '/ThumbNails';
-    fs.chmodSync(path, 0770);
+    fs.chmodSync(path, 0665);
     next();
   });
 }, function(req,res) {
@@ -158,6 +156,9 @@ app.get('/clusters', function (req,res,next) {
 app.get('/thumbnails',function(req,res) {
   thumbnails = [];
   dir = req.query.user_id + '/ThumbNails';
+
+  // Set appropriate permissions for files
+  command =
   thumbs = fs.readdirSync(dir);
 
   // Start Async
