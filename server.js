@@ -172,6 +172,7 @@ app.get('/thumbnails', function(req,res) {
       } else {
         tmp['cluster_name'] = result[0].cluster_name;
         tmp['image_path'] = 'thumbs.librorum.in/' + req.query.user_id + '/ThumbNails/'+ thumb;
+        console.log(tmp);
         answer_set.push(tmp);
       }
     });
