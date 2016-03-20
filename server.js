@@ -169,7 +169,7 @@ app.get('/thumbnails', function(req,res) {
     //SQL query
     sqlString = 'SELECT cluster_name FROM clusters WHERE cluster_number = ?';
 
-    connection.query(sqlString,values,function(err,result) {
+    connection.query(sqlString,values,function(err,result,tmp) {
       if(err) {
         console.log(err);
         res.send('Error');
