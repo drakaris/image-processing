@@ -163,9 +163,7 @@ app.get('/thumbnails', function(req,res) {
     values = [];
     values.push(thumb.split('.')[0]);
 
-    tmp['cluster_number'] = thumb.split('.')[0];
-    tmp['image_path'] = 'thumbs.librorum.in/' + req.query.user_id + '/ThumbNails/' + thumb;
-    tmp['cluster_name'] = '';
+
 
     //SQL query
     sqlString = 'SELECT cluster_name FROM clusters WHERE cluster_number = ? LIMIT 1';
@@ -176,7 +174,9 @@ app.get('/thumbnails', function(req,res) {
         res.send('Error');
       } else {
         console.log(result);
-        tmp['cluster_name'] = 'asdf';
+        tmp['cluster_number'] = thumb.split('.')[0];
+        tmp['image_path'] = 'thumbs.librorum.in/' + req.query.user_id + '/ThumbNails/' + thumb;
+        tmp['cluster_name'] = result[0].cluster_name;
       }
     });
     thumbnails.push(tmp);
