@@ -165,6 +165,7 @@ app.get('/thumbnails', function(req,res) {
 
     tmp['cluster_number'] = thumb.split('.')[0];
     tmp['image_path'] = 'thumbs.librorum.in/' + req.query.user_id + '/ThumbNails/' + thumb;
+    tmp['cluster_name'] = '';
 
     //SQL query
     sqlString = 'SELECT cluster_name FROM clusters WHERE cluster_number = ? LIMIT 1';
