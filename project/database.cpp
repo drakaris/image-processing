@@ -86,6 +86,11 @@ vector<int> FetchID(int id)
 				{
 					int si = result[i][0];
 					ids.push_back(si);
+					stringstream query_string_3;
+					query_string_3 << "UPDATE `photos` SET `processed` = 1 WHERE `id` = " << si  ;
+					qs = query_string_3.str();
+					mysqlpp::Query query_2 = conn.query(qs);
+					query_2.store();
 				}
 
 			}
@@ -111,13 +116,14 @@ vector<int> FetchID(int id)
 void PopulateCluster(string cluster_number,int pid , int uid , string path)
 {
 	//stringstream select_string;
+	//select_string << "SELECT * FROM `clusters` where `user_id` = " << uid << " AND" << " `photo_id` = " << pid;
 	//string qs = select_string.str();
 	//mysqlpp::Query query = conn.query(qs);
 	//if(mysqlpp::StoreQueryResult res = query.store())
 	//{
 	//	if(res.num_rows() == 0)
 	//	{
-			cout << "Inserted" << "\n";
+			//cout << "Inserted" << "\n";
 			stringstream query_string;
     		query_string << "INSERT into `clusters`(`user_id`,`photo_id`,`cluster_number`,`filtered_image_path`) values("<< uid << "," << pid << "," << cluster_number << ",'" << path <<  "')" ;
     		string qs = query_string.str();
@@ -136,4 +142,56 @@ void PopulateCluster(string cluster_number,int pid , int uid , string path)
 	//	}
 
 	//}
+}
+
+
+
+
+std::vector<string> FetchClusterImages(int uid)
+{
+	std::vector<string> path;
+	stringstream query_string;
+    query_string << "SELECT * FROM `clusters` WHERE `user_id` = " << uid ;
+    string qs = query_string.str();
+	mysqlpp::Query query = conn.query(qs);
+	if(mysqlpp::StoreQueryResult result = query.store())
+	{
+		for(int i = 0 ; i < result.num_rows() ; i++)
+		{
+			stringstream tmp;
+			tmp << result[i][5];
+			string s = tmp.str();
+			path.push_back(s);
+		}
+	}
+	else
+	{
+		cout << "Error :" << query.error();
+		exit(1);
+	}
+	return path;
+}
+
+
+std::vector<int> FetchClusterLabels(int uid)
+{
+	std::vector<int> label;
+	stringstream query_string;
+    query_string << "SELECT * FROM `clusters` WHERE `user_id` = " << uid ;
+    string qs = query_string.str();
+	mysqlpp::Query query = conn.query(qs);
+	if(mysqlpp::StoreQueryResult result = query.store())
+	{
+		for(int i = 0 ; i < result.num_rows() ; i++)
+		{
+			int s = result[i][3];
+			label.push_back(s);
+		}
+	}
+	else
+	{
+		cout << "Error :" << query.error();
+		exit(1);
+	}
+	return label;
 }

@@ -35,7 +35,7 @@ int main(int argc, const char *argv[])
   for(int in = 0 ; in < name.size() ; in++)
   {
     img = imread(name[in]);
-    // Apply the classifier to the fram
+    // Apply the classifier to the frame
     if (!img.empty())
     {
       cropped = ApplyDetector(img , faceDetector);
@@ -69,6 +69,9 @@ int main(int argc, const char *argv[])
     lbp_array.push_back(lbp);
   }
   cout << "LBP Array size" << lbp_array.size() << "\n";
-  ClusterFaces(lbp_array , source_id_array , atoi(argv[1]) , filtered_array , thumbnail_array);
+  //ClusterFaces(lbp_array , source_id_array , atoi(argv[1]) , filtered_array , thumbnail_array);
+  ClusterFacesOne(lbp_array , source_id_array , atoi(argv[1]) , filtered_array , thumbnail_array);
+  //HeirarchicalClusters(lbp_array , source_id_array , atoi(argv[1]) , filtered_array , thumbnail_array);
+
 	return 0;
 }
