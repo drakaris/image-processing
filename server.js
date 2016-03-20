@@ -155,17 +155,17 @@ app.get('/clusters', function (req,res,next) {
 });
 
 app.get('/thumbnails', function(req,res) {
-  answer_set = [];
+  thumbnails = [];
   dir = req.query.user_id + '/ThumbNails';
   thumbs = fs.readdirSync(dir);
-  console.log(thumbs);
   thumbs.forEach(function(thumb) {
+    console.log(thumb);
     values = [];
     tmp = {};
     sqlString = 'SELECT cluster_name FROM clusters WHERE cluster_number = ? LIMIT 1';
 
     tmp['cluster_number'] = thumb.split('.')[0];
-    values.push(tmp['cluster_number']);
+    values.push(thumb.split('.')[0]);
     connection.query(sqlString,values,function(err,result) {
       if(err) {
         console.log(err);
@@ -174,13 +174,13 @@ app.get('/thumbnails', function(req,res) {
         tmp['cluster_name'] = result[0].cluster_name;
         tmp['image_path'] = 'thumbs.librorum.in/' + req.query.user_id + '/ThumbNails/'+ thumb;
         console.log(tmp);
-        answer_set.push(tmp);
+        thumbnails.push(tmp);
       }
     });
   });
 
   // Return thumbnails results
-  res.send(answer_set);
+  res.send(thumbnails);
 });
 
 app.get('/renameCluster', function(req,res) {
