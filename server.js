@@ -90,7 +90,7 @@ app.post('/upload', function(req,res) {
 
       // Move file from tmp to local project
       if(!fs.existsSync(dir)) {
-        fs.mkdirSync(dir,0775);
+        fs.mkdirSync(dir,0777);
         fs.renameSync(files.upload[0].path, newPath);
       } else {
         fs.renameSync(files.upload[0].path, newPath);
@@ -158,7 +158,7 @@ app.get('/thumbnails',function(req,res) {
   dir = req.query.user_id + '/ThumbNails';
 
   // Set appropriate permissions for files
-  //command =
+  fs.chmodSync(dir, 0777);
   thumbs = fs.readdirSync(dir);
 
   // Start Async
